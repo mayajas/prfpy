@@ -3,6 +3,7 @@ from scipy.optimize import fmin_powell, minimize
 from scipy.stats import zscore
 from copy import deepcopy
 from joblib import Parallel, delayed
+from .model import CFGaussianModel
 
 
 def error_function(
@@ -76,6 +77,13 @@ def iterative_search(model, data, start_params, args, xtol, ftol, verbose=True,
         first element: parameter values
         second element: rsq value
     """
+    if isinstance(model, CFGaussianModel):
+        # if the model is a CF model, the first parameter is the number of vertices
+        # we need to pull this out into args because we do not want it to be optimized
+        # and we need to pass it to the model's return_prediction method as the last arg (see return_prediction)
+        args['vert'] = start_params[0]
+        start_params = start_params[1:]
+
     if bounds is not None:
         assert len(bounds) == len(
             start_params), "Unequal bounds and parameters"
