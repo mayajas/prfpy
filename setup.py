@@ -47,6 +47,7 @@ setup(name="prfpy",
                "Topic :: Scientific/Engineering"],
       python_requires='>=3.6, <4',
       packages=find_packages(),
+      package_data={'': ['tdm_hrfs_highsample.tsv']},
       install_requires=requirements,
       zip_safe=False,
       )
