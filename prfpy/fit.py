@@ -133,7 +133,11 @@ def iterative_search(model, data, start_params, args, xtol, ftol, verbose=True,
             full_output=True,
             disp=verbose)
 
-        return np.nan_to_num(np.r_[output[0], 1 - (output[1])/(len(data) * data.var())])
+        if isinstance(model, CFGaussianModel):
+            # insert vertex index back into parameter array for output
+            return np.nan_to_num(np.r_[args['vert'], output[0], 1 - (output[1])/(len(data) * data.var())])
+        else:
+            return np.nan_to_num(np.r_[output[0], 1 - (output[1])/(len(data) * data.var())])
 
 
 class Fitter:
