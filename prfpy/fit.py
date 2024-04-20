@@ -77,7 +77,7 @@ def iterative_search(model, data, start_params, args, xtol, ftol, verbose=True,
         first element: parameter values
         second element: rsq value
     """
-    if isinstance(model, CFGaussianModel):
+    if isinstance(model, CFGaussianModel) and bounds is None:
         # if the model is a CF model, the first parameter is the number of vertices
         # we need to pull this out into args because we do not want it to be optimized
         # and we need to pass it to the model's return_prediction method as the last arg (see return_prediction)
@@ -133,7 +133,7 @@ def iterative_search(model, data, start_params, args, xtol, ftol, verbose=True,
             full_output=True,
             disp=verbose)
 
-        if isinstance(model, CFGaussianModel):
+        if isinstance(model, CFGaussianModel) and bounds is None:
             # insert vertex index back into parameter array for output
             return np.nan_to_num(np.r_[args['vert'], output[0], 1 - (output[1])/(len(data) * data.var())])
         else:
